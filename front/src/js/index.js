@@ -10,6 +10,7 @@ $(document).ready(function() {
 			dataType: 'json',
 			data: f_data,
 			success: function(data) {
+				console.log("response: " + data);
 				var jsonResult = JSON.stringify(data);
 				$("#results").val(unescape(jsonResult));
 			}

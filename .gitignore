@@ -1,4 +1,7 @@
 .idea
-target/
+**/target/
 *.iml
 .ipr
+
+*.lock
+/out
