@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+
+<head>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js" data-semver="2.1.1"
+            data-require="jquery@*"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js" data-semver="3.1.1"
+            data-require="bootstrap@3.1.1"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-mockjax/1.5.3/jquery.mockjax.min.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/jquery-form-serializer.js"></script>
+
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" data-semver="3.1.1"
+          data-require="bootstrap-css@3.1.1"/>
+    <link rel="stylesheet" href="css/index.css"/>
+</head>
+
+<body>
+<div class="container">
+    <div class="well">
+        <div>
+            <H2 class="text-center">Университетское анкетирование</H2>
+        </div>
+        <form id="surveyForm" class="form-vertical" role="form" autocomplete="off" method="POST" action="/survey/">
+            <fieldset>
+                <div class="col-xs-12">
+                    <button class="btn btn-default pull-right" id="defaultData">Заполнить форму</button>
+                </div>
+                <div class="form-group col-xs-12 col-sm-6">
+                    <label for="firstname" class="control-label">Имя</label>
+                    <input type="text" class="form-control" name="firstname" id="firstname" placeholder="Введите имя">
+                </div>
+                <div class="form-group col-xs-12 col-sm-6">
+                    <label for="lastname" class="control-lable">Фамилия</label>
+                    <input type="text" class="form-control" name="lastname" id="lastname" placeholder="Введите фамилию">
+                </div>
+                <div class="form-group col-xs-12 col-sm-6">
+                    <label for="middlename" class="control-lable">Отчество</label>
+                    <input type="text" class="form-control" name="middlename" id="middlename"
+                           placeholder="Введите отчество">
+                </div>
+                <div class="form-group col-xs-12 col-sm-12">
+                    <label for="address" class="control-label">Адрес</label>
+                    <input type="text" class="form-control" name="address[street]" id="address_street"
+                           placeholder="Введите улицу">
+                </div>
+                <div class="form-group col-xs-6 col-sm-6">
+                    <input type="text" class="form-control" name="address[city]" id="address_city"
+                           placeholder="Введите город">
+                </div>
+                <div class="form-group col-xs-6 col-sm-6">
+                    <input type="text" class="form-control" name="address[building]" id="address_building"
+                           placeholder="Введите дом">
+                </div>
+                <div class="form-group col-xs-6 col-sm-6">
+                    <input type="text" class="form-control" name="address[room]" id="address_room"
+                           placeholder="Введите квартиру">
+                </div>
+                <div class="col-xs-12">
+                    <label class="control-label" for="emails">Электронная почта:</label>
+                    <div class="control-group" id="emails">
+                        <div class="controls">
+                            <div class="entry input-group form-group">
+                                <span class="input-group-addon">@</span>
+                                <input class="form-control" name="email" placeholder="Введите email" type="text">
+                                <span class="input-group-btn"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pull-right">
+                    <br>
+                    <div class="btn-group col-xs-12">
+                        <button type="button" class="btn btn-primary" id="sendPlainJSon">Отправить</button>
+                        <button type="reset" class="btn btn-warning">Очистить форму</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div class="container">
+    <div class="well col-xs-12">
+        <div class="control-label col-xs-12">
+            <label>Data sent:</label>
+        </div>
+        <div class="col-xs-12">
+            <textarea class="form-control" readonly id="dataSent">here: data sent...</textarea>
+            <br>
+        </div>
+        <div class="control-label col-xs-12">
+            <label>Result:</label>
+        </div>
+        <div class="col-xs-12">
+            <textarea class="form-control" readonly id="results">Waiting to send request</textarea>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
