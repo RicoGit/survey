@@ -4,4 +4,6 @@ This project made as practical work for the university. It's a simple client-ser
 
 ### How to run
 
-.. todo
+#### Start server
+
+RUST_LOG=debug cargo run

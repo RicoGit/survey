@@ -1,35 +1,30 @@
+use crate::survey::NewSurvey;
 use actix_cors::Cors;
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
 
-#[get("/")]
-async fn hello() -> impl Responder {
-    HttpResponse::Ok().body("Hello world!")
-}
-
-#[post("/echo")]
-async fn echo(req_body: String) -> impl Responder {
-    HttpResponse::Ok().body(req_body)
-}
+mod survey;
 
 #[post("/survey")]
-async fn send_survey() -> impl Responder {
-    HttpResponse::Ok().json("{'result':'Survey accepted!'}")
+async fn create_survey(new_survey: web::Json<NewSurvey>) -> impl Responder {
+    // todo create new surver to mongo db
+    println!("{:?}", new_survey);
+    HttpResponse::Created()
 }
+
+// todo add methods getByName, getAll, removeByName methods for managing Survey
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    env_logger::init();
+
     HttpServer::new(|| {
         let cors = Cors::default()
-            .allowed_origin("http://localhost:63343")
-            .allowed_methods(vec!["GET", "POST"])
+            .allow_any_origin()
+            .allow_any_header()
+            .allow_any_method()
             .max_age(3600);
 
-        App::new()
-            .wrap(cors)
-            .service(hello)
-            .service(echo)
-            .service(send_survey)
-        // .route("/hey", web::get().to(manual_hello))
+        App::new().wrap(cors).service(hello).service(create_survey)
     })
     .bind("127.0.0.1:8080")?
     .run()
