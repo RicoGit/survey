@@ -1,6 +1,6 @@
 use crate::survey::NewSurvey;
 use actix_cors::Cors;
-use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{post, web, App, HttpResponse, HttpServer, Responder};
 
 mod survey;
 
@@ -24,7 +24,7 @@ async fn main() -> std::io::Result<()> {
             .allow_any_method()
             .max_age(3600);
 
-        App::new().wrap(cors).service(hello).service(create_survey)
+        App::new().wrap(cors).service(create_survey)
     })
     .bind("127.0.0.1:8080")?
     .run()

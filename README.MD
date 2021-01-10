@@ -7,3 +7,10 @@ This project made as practical work for the university. It's a simple client-ser
 #### Start server
 
 RUST_LOG=debug cargo run
+
+---
+
+### Documentation
+ 
+[actix-web](https://actix.rs/docs/)  
+[boostrap](https://getbootstrap.com/docs/5.0/getting-started/introduction/)
