@@ -1,41 +1,51 @@
 //! Mongo utils module
 
-use crate::survey::NewSurvey;
-use anyhow::Result;
+use crate::survey::Survey;
+use anyhow::{Context, Result};
+
+use futures::stream::StreamExt;
 use log::info;
-use mongodb::{bson, bson::doc, options::ClientOptions, Client};
+use mongodb::bson::{doc, Document};
+use mongodb::{bson, Database};
+use serde::de::DeserializeOwned;
 
-pub async fn init() -> Result<Client> {
-    // Parse your connection string into an options struct
-    let mut client_options = ClientOptions::parse("mongodb://localhost:27017").await?;
+use std::any::TypeId;
+use wither::mongodb::Client;
 
-    // Manually set an option
-    client_options.app_name = Some("Survey app".to_string());
-
-    // Get a handle to the cluster
-    let client = Client::with_options(client_options)?;
+/// Connects db and sends check request
+pub async fn init() -> Result<Database> {
+    let db = Client::with_uri_str("mongodb://localhost:27017/")
+        .await?
+        .database("survey");
 
     // Ping the server to see if you can connect to the cluster
-    client
-        .database("survey")
-        .run_command(doc! {"ping": 1}, None)
-        .await?;
+    db.run_command(doc! {"ping": 1}, None).await?;
 
     info!("MongoDb was connected successfully.");
 
-    Ok(client)
+    Ok(db)
 }
 
-/// Saves new survey to mongoDb
-pub async fn create_survey(db: &Client, survey: &NewSurvey) -> Result<()> {
-    let doc = bson::to_bson(survey)?
-        .as_document()
-        .expect("NewSurvey should be serialized as bson document")
-        .to_owned();
-
-    db.database("survey")
+/// Retrieves all surveys
+pub async fn get_survey_list(db: &Client) -> Result<Vec<Survey>> {
+    let surveys: Vec<Result<Survey>> = db
+        .database("survey")
         .collection("surveys")
-        .insert_one(doc, None)
-        .await?;
-    Ok(())
+        .find(None, None)
+        .await?
+        .map(|res| res.map(as_struct).context("Deserialize fail"))
+        .collect()
+        .await;
+
+    println!("{:?}", surveys);
+    surveys.into_iter().collect::<Result<Vec<Survey>>>()
+}
+
+/// Converts Document to type T
+fn as_struct<T: DeserializeOwned + Default + 'static>(doc: Document) -> T {
+    println!("{:?}", doc);
+    bson::from_bson::<T>(bson::Bson::Document(doc)).expect(&format!(
+        "Deserialization fail for struct: {:?}",
+        TypeId::of::<T>()
+    ))
 }

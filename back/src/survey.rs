@@ -3,6 +3,10 @@
 use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
+use wither::bson::doc;
+use wither::bson::oid::ObjectId;
+use wither::prelude::*;
+
 
 #[derive(Debug, Serialize, Deserialize, Eq, Hash, PartialEq)]
 #[serde(tag = "kind")]
@@ -12,8 +16,11 @@ pub enum Question {
     Number { name: String, description: String },
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct NewSurvey {
+#[derive(Model, Serialize, Deserialize, Debug, Default)]
+#[model(index(keys = r#"doc!{"name": 1}"#, options = r#"doc!{"unique": true}"#))]
+pub struct Survey {
+    #[serde(rename = "_id", skip_serializing_if = "Option::is_none")]
+    id: Option<ObjectId>,
     name: String,
     description: String,
     questions: Vec<Question>,
