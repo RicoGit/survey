@@ -15,7 +15,6 @@ docker run --network=host mongo
 RUST_LOG=debug cargo run
 ```
 
-
 ---
 
 ### Documentation

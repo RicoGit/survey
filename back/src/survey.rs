@@ -7,7 +7,6 @@ use wither::bson::doc;
 use wither::bson::oid::ObjectId;
 use wither::prelude::*;
 
-
 #[derive(Debug, Serialize, Deserialize, Eq, Hash, PartialEq)]
 #[serde(tag = "kind")]
 pub enum Question {
@@ -17,7 +16,7 @@ pub enum Question {
 }
 
 #[derive(Model, Serialize, Deserialize, Debug, Default)]
-#[model(index(keys = r#"doc!{"name": 1}"#, options = r#"doc!{"unique": true}"#))]
+#[model()]
 pub struct Survey {
     #[serde(rename = "_id", skip_serializing_if = "Option::is_none")]
     id: Option<ObjectId>,
